@@ -1,6 +1,6 @@
 /*
-* K·Pay Integration Library - v1.2.6 - Copyright Kiezel 2018
-* Last Modified: 2018-07-25
+* K·Pay Integration Library - v1.2.7 - Copyright Kiezel 2018
+* Last Modified: 2018-10-30
 *
 * BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO 
 * WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE 
@@ -91,7 +91,7 @@ function _showPaidAppPopup() {
   
   //hook up buttons
   _get("btnPaidAppOk").onclick = function(evt) {
-    _showElement(paidAppPopup);    //hide the popup
+    _showElement(paidAppPopup, false);    //hide the popup
   };
   _get("btnPaidAppAlreadyPaid").onclick = function(evt) {
     //get popup
@@ -99,7 +99,7 @@ function _showPaidAppPopup() {
     
     //hook up button
     _get("btnAlreadyPaidOk").onclick = function(evt) {
-      _showElement(alreadyPaidPopup);    //hide the already paid popup
+      _showElement(alreadyPaidPopup, false);    //hide the already paid popup
     };
     
     //show already paid popup
