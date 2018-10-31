@@ -1,6 +1,6 @@
 /*
-* K·Pay Integration Library - v1.2.7 - Copyright Kiezel 2018
-* Last Modified: 2018-10-30
+* K·Pay Integration Library - v1.2.8 - Copyright Kiezel 2018
+* Last Modified: 2018-10-31
 *
 * BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO 
 * WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE 
@@ -61,7 +61,7 @@ function _initkpd() {
   }
   
   //register ourselves with the main lib to we can show the dialogs
-  kc.setDialogCallbacks(_mainLibInitializing, _handleEvent, _hideAlert);
+  kc.setDialogCallbacks(_mainLibInitializing, _handleEvent);
 }
 
 function _mainLibInitializing(isNewInstall) {
@@ -114,15 +114,6 @@ function _showPaidAppPopup() {
 function _handleEvent(e, data) {
   console.log("KPay_dialogs - _handleEvent(e == " + e + ", extraData == " + data + ")");
   switch (e) {
-    case kcm.eventTypes.GenericError:
-      _showError(kcfg.KPAY_UNKNOWN_ERROR_MSG);
-      break;
-    case kcm.eventTypes.BluetoothUnavailable:
-      _showError(kcfg.KPAY_BLUETOOTH_UNAVAILABLE_MSG);
-      break;
-    case kcm.eventTypes.InternetUnavailable:
-      _showError(kcfg.KPAY_INTERNET_UNAVAILABLE_MSG);
-      break;
     case kcm.eventTypes.CodeAvailable:
       _showTrialEnded(kcfg.KPAY_CODE_AVAILABLE_MSG, data);
       break;
@@ -251,10 +242,6 @@ function _getUserAttention(pattern) {
   vibration.start(pattern ? pattern : "nudge-max");
 }
   
-function _isErrorAlertDisplayed() {
-  return _errorDialog && _errorDialog.style.display == "inline";
-}
-
 // // Convert a number to a special monospaced number
 function _monoDigit(num) {
   let monoNum = '';

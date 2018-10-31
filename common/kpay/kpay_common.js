@@ -1,6 +1,6 @@
 /*
-* K·Pay Integration Library - v1.2.7 - Copyright Kiezel 2018
-* Last Modified: 2018-04-01
+* K·Pay Integration Library - v1.2.8 - Copyright Kiezel 2018
+* Last Modified: 2018-10-31
 *
 * BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO 
 * WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE 
@@ -33,9 +33,6 @@
   All events that can be fired by kpay lib.
 */
 export var eventTypes = {
-  BluetoothUnavailable: 0,   /**< Cannot send messages to phone */
-  InternetUnavailable:  1,   /**< Cannot connect with kpay server */
-  GenericError:         2,   /**< Generic error (e.g. invalid message format) */
   TrialStarted:         3,   /**< Trial has started (trial end time as extra data) ==> unlock all features available during trial */
   TrialEnded:           4,   /**< Trial has ended, kiezelpay lib is attempting to initiate the purchase on the server ==> disable all trial features */
   CodeAvailable:        5,   /**< A purchase transaction has been initiated on the kiezelpay server (purchase code as extra data) */

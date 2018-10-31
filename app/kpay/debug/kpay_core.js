@@ -1,6 +1,6 @@
 /*
-* K·Pay Integration Library - v1.2.7 - Copyright Kiezel 2018
-* Last Modified: 2018-07-25
+* K·Pay Integration Library - v1.2.8 - Copyright Kiezel 2018
+* Last Modified: 2018-10-31
 *
 * BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO
 * WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE
@@ -36,18 +36,13 @@ import * as kcfg from '../kpay_config.js';
 import * as kp from './kpay.js';
 /*end of imports*/
 
-var KPAY_APP_ID = 1278392827;
-
 export var state = null;
 var _useFileTransfer = false;
 
 var flags = {
   purchaseInProgress: false,
   purchaseStarted: false,
-  statusCheckingFinished: false,
-  statusRequestsWithoutResponse: 0,
-  companionConnectionFailures: 0,
-  genericErrors: 0
+  statusCheckingFinished: false
 };
 
 var _lastEvent = null;
@@ -57,17 +52,16 @@ var _failsafeStatusCheckInterval = 15000;
 var _random = null;
 var _lastPurchaseCode = null;
 
-var _genericErrorsThreshold = 5;
-
 var _hasTimeBasedTrial = false;
 var _eventCb = function() { return false; };
 var _eventDialogInitializeCallback = function() {};
 var _eventDialogCb = function() {};
-var _hideAlertCb = function() {};
 var _timeTrialInitializeCallback = function() {};
 var _timeTrialCompanionConnectionOpenCallback = function() {};
 var _timeTrialCompanionMessageReceivedCallback = function() { return false; };
 var _validationCb = function(msg, random, flags) { return true; }
+
+var KPAY_APP_ID = 1278392827;
 
 /********************* KPAY WATCH ***********************/
 //called upon app start
@@ -120,10 +114,6 @@ export function processMessageFromCompanion(msg) {
   console.log("_onMessageFromCompanion()");
   if (_isStatusResponseMessage(msg)) {
     console.log("KPay - Message from companion: " + JSON.stringify(msg));
-    if (flags.statusRequestsWithoutResponse > kcfg.StatusRequestsWithoutResponseThreshold) {
-      _hideAlertCb();    //hide any alert that might have been shown before
-    }
-    flags.statusRequestsWithoutResponse = 0;
     _handleStatusResult(msg);
   }
   else if (msg && msg.purchase === 'start') {
@@ -179,21 +169,6 @@ function _statusCheck() {
   //show that we are performing status checks
   flags.statusCheckingFinished = false;
 
-  //check if our status requests reach their destination
-  if (!kcfg.SuppressAllErrors &&
-      _lastEvent !== kcm.eventTypes.CodeAvailable && 
-      _lastEvent !== kcm.eventTypes.PurchaseStarted && 
-      flags.companionConnectionFailures == 0 &&
-      (!state.startInstallTime || ((new Date().getTime()) - state.startInstallTime) > kcfg.SupressConnectionErrorsTimeout)) {
-    flags.statusRequestsWithoutResponse++;
-  }
-
-  if (flags.statusRequestsWithoutResponse > kcfg.StatusRequestsWithoutResponseThreshold) {
-    //no response from kp server on the last x status requests, assume internet is not available
-    //fire the event
-    fireEvent(kcm.eventTypes.InternetUnavailable, null, false);
-  }
-
   //send a msg to the companion to request the current status of this app
   //add random number to avoid replay attacks
   if (!_random) {
@@ -239,10 +214,6 @@ function _sendMessageToCompanion(msg) {
 
       //message sent!
       console.log("KPay - message sent succesfull!");
-      if (flags.companionConnectionFailures > kcfg.CompanionConnectionFailuresThreshold) {
-        _hideAlertCb();    //hide any alert that might have been shown before
-      }
-      flags.companionConnectionFailures = 0;
       return;
     }
   }
@@ -256,15 +227,6 @@ function _sendMessageToCompanion(msg) {
 
 function _outboxFailedHandler(msg) {
   console.log("KPay - _outboxFailedHandler(): message sending failed!");
-
-  if (flags.companionConnectionFailures > kcfg.CompanionConnectionFailuresThreshold) {
-    //fire the event
-    fireEvent(kcm.eventTypes.BluetoothUnavailable, null, false);
-  }
-  else if (!kcfg.SuppressAllErrors && (!state.startInstallTime || ((new Date().getTime()) - state.startInstallTime) > kcfg.SupressConnectionErrorsTimeout)) {
-    flags.companionConnectionFailures++;
-  }
-
   //try again in a little while
   console.log("KPay - try again in a little while...");
   startStatusChecksWithFailsafe(false);
@@ -342,24 +304,12 @@ export function getStatus() {
   return "unlicensed";
 }
 
-export function genericErrorOccurred() {
-  console.log("KPay - g enericErrorOccurred()");
-  if (flags.genericErrors > _genericErrorsThreshold) {
-    //fire the event
-    fireEvent(kcm.eventTypes.GenericError, null, false);
-  }
-  else if (!kcfg.SuppressAllErrors) {
-    flags.genericErrors++;
-  }
-}
-
 function _handleStatusResult(msg) {
   console.log("KPay - _handleStatusResult");
 
   //in NON low memory mode, each message has a checksum
   if (!_validationCb(msg, _random, _generateFlags(kcfg.KPAY_TEST_MODE, !_hasTimeBasedTrial))) {
     console.log("KPay - Invalid message received!");
-    genericErrorOccurred();
 
     //try again
     startStatusChecksWithFailsafe(true);
@@ -367,12 +317,6 @@ function _handleStatusResult(msg) {
     //do not proceed when msg invalid
     return;
   }
-
-  //message is valid and we are going to check the results
-  if (flags.genericErrors > _genericErrorsThreshold) {
-    _hideAlertCb();    //hide any alert that might have been shown before
-  }
-  flags.genericErrors = 0;
 
   let response = msg.serverResponse;
   console.log("KPay - Server response received: " + JSON.stringify(response));
@@ -416,7 +360,6 @@ function _handleStatusResult(msg) {
   else if (!_timeTrialCompanionMessageReceivedCallback(response)) {
     //unknown message... try again
     console.log("KPay - Unsupported status: " + response.status);
-    genericErrorOccurred();
 
     //try again
     startStatusChecksWithFailsafe(true);
@@ -457,10 +400,9 @@ export function setEventHandler(eventCb) {
   _eventCb = eventCb;
 }
 
-export function setDialogCallbacks(initializeCb, eventCb, hideAlertCb) {
+export function setDialogCallbacks(initializeCb, eventCb) {
   _eventDialogInitializeCallback = initializeCb;
   _eventDialogCb = eventCb;
-  _hideAlertCb = hideAlertCb;
 }
 
 export function setTimeTrialCallbacks(initializeCb, companionConnectionOpenCb, companionMessageReceivedCb) {

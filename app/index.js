@@ -4,7 +4,7 @@
 import document from "document";
 import clock from "clock";
 import * as messaging from 'messaging';
-
+import { memory } from "system";
 
 /**** BEGIN KPAY IMPORTS - REQUIRED ****/
 /*
@@ -67,18 +67,6 @@ setTime(new Date());
 /*
 kpay.setEventHandler((e, data) => {
   switch (e) {
-    case kpay_common.eventTypes.GenericError:
-      //show generic error msg
-      console.log("KPay GenericError event");
-      break;
-    case kpay_common.eventTypes.BluetoothUnavailable:
-      //show connection to phone unavailable msg
-      console.log("KPay BluetoothUnavailable event");
-      break;
-    case kpay_common.eventTypes.InternetUnavailable:
-      //show internet connection unavailable msg
-      console.log("KPay InternetUnavailable event");
-      break;
     case kpay_common.eventTypes.TrialStarted:
       //(optional) show user msg he is in trial and how long it will last (data == Date with trial end time)
       console.log("KPay TrialStarted event; trial ends at " + data);
@@ -154,3 +142,7 @@ messaging.peerSocket.addEventListener("error", (err) => {
   console.log("Communication onError called: " + err.code + " - " + err.message);
 });
 /**** END APP MESSAGING -- CAN BE REMOVED IF YOUR APP DOES NOT NEED MESSAGING ****/
+
+var totalUsage = 0;
+var totalMeasurements = 0;
+setInterval(function() { totalUsage += memory.js.used; totalMeasurements++; console.log("JS memory: " + memory.js.used + "/" + memory.js.total + " (average: " + Math.round(totalUsage/totalMeasurements) + "/" + memory.js.total + ")"); }, 1000);
