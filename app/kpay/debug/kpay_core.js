@@ -1,6 +1,6 @@
 /*
-* K·Pay Integration Library - v1.2.8 - Copyright Kiezel 2018
-* Last Modified: 2018-10-31
+* K·Pay Integration Library - v1.2.9 - Copyright Kiezel 2018
+* Last Modified: 2018-11-07
 *
 * BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO
 * WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE
@@ -265,7 +265,6 @@ export function cancelPurchase() {
 
     //stop doing status checks and hide any purchase dialogs still visible
     endStatusReached();
-    _hideAlertCb();
 
     //clear last event to make sure the purchase dialog is shown again if startPurchase() is called
     _lastEvent = null;
