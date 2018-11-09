@@ -1,6 +1,6 @@
 /*
-* K·Pay Integration Library - v1.2.9 - Copyright Kiezel 2018
-* Last Modified: 2018-11-07
+* K·Pay Integration Library - v1.2.10 - Copyright Kiezel 2018
+* Last Modified: 2018-11-09
 *
 * BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO
 * WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE
@@ -56,6 +56,7 @@ var _hasTimeBasedTrial = false;
 var _eventCb = function() { return false; };
 var _eventDialogInitializeCallback = function() {};
 var _eventDialogCb = function() {};
+var _hideAlertCb = function() {};
 var _timeTrialInitializeCallback = function() {};
 var _timeTrialCompanionConnectionOpenCallback = function() {};
 var _timeTrialCompanionMessageReceivedCallback = function() { return false; };
@@ -265,6 +266,7 @@ export function cancelPurchase() {
 
     //stop doing status checks and hide any purchase dialogs still visible
     endStatusReached();
+    _hideAlertCb();
 
     //clear last event to make sure the purchase dialog is shown again if startPurchase() is called
     _lastEvent = null;
@@ -399,9 +401,10 @@ export function setEventHandler(eventCb) {
   _eventCb = eventCb;
 }
 
-export function setDialogCallbacks(initializeCb, eventCb) {
+export function setDialogCallbacks(initializeCb, eventCb, hideAlertCb) {
   _eventDialogInitializeCallback = initializeCb;
   _eventDialogCb = eventCb;
+  _hideAlertCb = hideAlertCb;
 }
 
 export function setTimeTrialCallbacks(initializeCb, companionConnectionOpenCb, companionMessageReceivedCb) {

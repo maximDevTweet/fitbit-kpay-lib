@@ -1,6 +1,6 @@
 /*
-* K·Pay Integration Library - v1.2.9 - Copyright Kiezel 2018
-* Last Modified: 2018-06-07
+* K·Pay Integration Library - v1.2.10 - Copyright Kiezel 2018
+* Last Modified: 2018-11-09
 *
 * BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO 
 * WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE 
@@ -40,7 +40,7 @@ import * as kcm from '../../../common/kpay/kpay_common.js';
 
 /******************* globals *******************/
 
-var _libraryVersion = "fb1.2.9";
+var _libraryVersion = "fb1.2.10";
 
 var _statusCheckInterval = 3000;
 var _statusCheckTimeout = 5000;
@@ -736,6 +736,10 @@ function _handleWebsocketError() {
 
 function _cancelWebsocketConnection() {
   console.log('KPay - Cancelling websocket status checking...');
+  if (_websocketConnectFailCheckTimer !== null) {
+    clearTimeout(_websocketConnectFailCheckTimer);
+    _websocketConnectFailCheckTimer = null;
+  }
   if (_websocketKeepAliveTimer !== null) {
     clearTimeout(_websocketKeepAliveTimer);
     _websocketKeepAliveTimer = null;

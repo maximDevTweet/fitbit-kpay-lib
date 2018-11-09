@@ -1,5 +1,5 @@
 /*
-* K·Pay Integration Library - v1.2.9 - Copyright Kiezel 2018
+* K·Pay Integration Library - v1.2.10 - Copyright Kiezel 2018
 * Last Modified: 2017-10-19
 *
 * BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO 
@@ -49,9 +49,14 @@ function _toBytesInt32(intValue) {
 }
 
 function _validateMessage(msg, random, flags) {
-  console.log("KPay - _validateMessage()");
-  
   var response = msg.serverResponse;
+  
+  console.log("KPay - _validateMessage()");
+  console.log("KPay - validation input - reponse.status: " + response.status);
+  console.log("KPay - validation input - random: " + random);
+  console.log("KPay - validation input - flags: " + flags);
+  console.log("KPay - validation input - trial duration in seconds: " + (i ? response.trialDurationInSeconds : "n/a"));
+  
   let r = 0;
   let i = (response.status === 'trial');
   let l = (response.status === 'licensed');

@@ -1,6 +1,6 @@
 /*
-* K·Pay Integration Library - v1.2.9 - Copyright Kiezel 2018
-* Last Modified: 2018-10-31
+* K·Pay Integration Library - v1.2.10 - Copyright Kiezel 2018
+* Last Modified: 2018-11-09
 *
 * BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO 
 * WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE 
@@ -61,7 +61,7 @@ function _initkpd() {
   }
   
   //register ourselves with the main lib to we can show the dialogs
-  kc.setDialogCallbacks(_mainLibInitializing, _handleEvent);
+  kc.setDialogCallbacks(_mainLibInitializing, _handleEvent, _hideAlert);
 }
 
 function _mainLibInitializing(isNewInstall) {
@@ -79,7 +79,9 @@ function _get(id) {
 }
 
 function _showElement(el, show) {
-  el.style.display = show ? 'inline' : 'none';
+  if (el) {
+    el.style.display = show ? 'inline' : 'none';
+  }
 }
 
 function _showPaidAppPopup() {
