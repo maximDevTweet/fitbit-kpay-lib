@@ -1,5 +1,5 @@
 /*
-* K·Pay Integration Library - v1.2.10 - Copyright Kiezel 2018
+* K·Pay Integration Library - v1.2.11 - Copyright Kiezel 2018
 * Last Modified: 2018-11-09
 *
 * BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO 
@@ -40,7 +40,7 @@ import * as kcm from '../../../common/kpay/kpay_common.js';
 
 /******************* globals *******************/
 
-var _libraryVersion = "fb1.2.10";
+var _libraryVersion = "fb1.2.11";
 
 var _statusCheckInterval = 3000;
 var _statusCheckTimeout = 5000;
