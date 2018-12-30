@@ -104,7 +104,7 @@ kpay.initialize();
 // the function "kpay.startPurchase()" ==> for example a "purchase now!" button that 
 // allows users to purchase before trial ends
 //
-// When not using the time based trial, this is the only way to start a purchase!
+// When not using the time based trial import above, this is the only way to start a purchase!
 //kpay.startPurchase();
 
 // all public KPay functions can be found in kpay.js (in debug/release folders)
