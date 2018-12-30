@@ -31,7 +31,7 @@ import './kpay/debug/kpay_filetransfer.js';
 
 // optional imports, remove if not needed to save memory
 import './kpay/debug/kpay_dialogs.js';			// remove if you handle KPay dialogs yourself
-import './kpay/debug/kpay_time_trial.js';			// remove if you do not want a time based trial
+import './kpay/debug/kpay_time_trial.js';		// leave this in even if you don't want a time based trial, just set the trial time to 0 in the product setting in your kpay account
 
 /*
  *
