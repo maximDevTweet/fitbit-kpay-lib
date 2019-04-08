@@ -31,7 +31,11 @@ import './kpay/debug/kpay_filetransfer.js';
 
 // optional imports, remove if not needed to save memory
 import './kpay/debug/kpay_dialogs.js';			// remove if you handle KPay dialogs yourself
-import './kpay/debug/kpay_time_trial.js';			// remove if you do not want a time based trial
+
+// remove this is you want to choose yourself when the purchase starts, 
+// leave it in if you want the purchase to start automatically (either after a long trial or immediately at startup of the app)
+// If you want the purchase to start immediately after install, just set the trial time to 0 in the product settings in your kpay account
+import './kpay/debug/kpay_time_trial.js';		
 
 /*
  *
@@ -104,7 +108,7 @@ kpay.initialize();
 // the function "kpay.startPurchase()" ==> for example a "purchase now!" button that 
 // allows users to purchase before trial ends
 //
-// When not using the time based trial, this is the only way to start a purchase!
+// When not using the time based trial import above, this is the only way to start a purchase!
 //kpay.startPurchase();
 
 // all public KPay functions can be found in kpay.js (in debug/release folders)

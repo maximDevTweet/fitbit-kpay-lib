@@ -1,6 +1,6 @@
 <!--
-* K·Pay Integration Library - v1.2.10 - Copyright Kiezel 2018
-* Last Modified: 2018-09-12
+* K·Pay Integration Library - v1.2.11 - Copyright Kiezel 2018
+* Last Modified: 2018-12-17
 *
 * BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO
 * WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE
@@ -43,17 +43,13 @@
       <rect class="full-size" fill="fb-black" opacity="0.8" />
       
       <textarea id="kpay_trialEndedMessage" x="5%" y="18%" width="90%" font-size="26" font-family="System-Regular" fill="#ffffff" text-anchor="middle" text-length="128"></textarea>
-      <svg id="kPay_TrialEndedCodeMask" width="100%" height="100%">
-        <text x="50%" y="100%-25" width="100%" id="kpay_trialEndedCode" text-anchor="middle" font-size="67" fill="#8b8b8b" font-family="System-Bold">00000</text>
-      </svg>
+      <text x="50%" y="100%-25" width="100%" id="kpay_trialEndedCode" text-anchor="middle" font-size="67" fill="#e5e5e5" font-family="System-Bold">00000</text>
     </svg>
  
     <svg x="0" y="0" width="100%" height="100%" id="kpay_purchaseSuccessDialog" display="none">
       <rect class="full-size" fill="fb-black" opacity="0.8" />
         
-      <svg id="kPay_PurchaseSuccessCircleMask" width="100%" height="100%">
-        <arc fill="#3cba92" x="50%-73" y="23" width="146" height="146" arc-width="3" start-angle="0" sweep-angle="360" />
-      </svg>
+      <arc fill="#3cba92" x="50%-73" y="23" width="146" height="146" arc-width="3" start-angle="0" sweep-angle="360" />
       <image x="50%-41" y="67" width="82" height="64" href="kpay/kpay_check.png" />
       <text x="50%" y="100%-40" text-anchor="middle" width="100%" font-size="30" font-family="System-Regular" fill="#ffffff">Purchase Successful!</text>
     </svg>
